@@ -1,0 +1,973 @@
+.package {
+	type 0 : integer
+	session 1 : integer
+}
+
+login 1 {
+	request {
+		username 0 : string
+		password 1 : string
+		nickname 2 : string
+		loginMacCode 3 : string
+		loginDevice 4 : integer
+		loginSrc 5 : integer
+		openId 6 : string
+		unionId 7 : string
+		inviteCode 8 : string
+	}
+	response {
+		result 0 : integer
+		msg 1 : string
+        lock_game 2 : integer
+        room_id 3 : integer
+        enter_key 4 : string
+	}
+}
+
+#心跳包
+heartbeat 2 {
+    request {
+        heartid 0 : integer
+		tick 1 : integer
+	}
+    response {
+		heartid 0 : integer
+		tick 1 : integer
+	}
+}
+
+servernotify 3 {
+	request {
+		id 0 : integer
+		msg 1 : string
+	}
+}
+
+.player_data {
+	uid 0 : integer
+	nickname 1 : string
+    level 2 : integer
+    head 3 : string
+    show_id 4 : string
+    noble_buy_days 5 : integer
+    noble_surplus_days 6 : integer
+    gold 7 : integer
+    bindgold 8 : integer
+    diamonds 9 : integer
+    bankgold 10 : integer
+    bankpwd 11 : string
+	free_lottery_num 12 : integer
+	exp 13 : integer
+	next_exp 14 : integer
+	username 15 : string
+    is_share 16 : integer
+	head21_surplus_days 17 : integer
+}
+
+player_data 4 {
+    request {
+    }
+    response {
+		result 0 : integer
+		player_data 1 : player_data
+	}
+}
+
+.game_data {
+	id 0 : integer
+	name 1 : binary
+	describe 2 : binary
+	state 3 : integer
+}
+
+game_list 5 {
+	request {
+	}
+	
+	response {
+		game_list 0 : *game_data
+	}
+}
+
+enter_game 6 {
+	request {
+		id 0 : integer
+        room_id 1 : integer
+	}
+
+	response {
+		result 0 : integer
+        msg 1 : string
+        game_id 2 : integer
+        key 3 : string
+        room_id 4 : integer
+	}
+}
+
+#赠送
+bank_transfer 7 {
+    request {
+		show_id 0 : string
+        gold 1 : integer
+		pwd 2 : string
+	}
+
+    response {
+        result 0 : integer
+        msg 1 : string
+    }
+}
+
+.award_tab {
+    key 0 : string
+    num 1 : integer
+}
+
+.week_tab {
+    is_reward 0 : integer
+    award 1 : *award_tab
+}
+
+.month_tab {
+    daynum 0 : integer
+    award 1 : *award_tab
+}
+
+signin_show 8 {
+    request {
+	}
+
+    response {
+        week_data 0 : *week_tab
+        month_day 1 : integer
+        month_tab 2 : *month_tab
+        month_reward 3 : *integer
+    }
+}
+
+signin_rewards_week 9 {
+    request {
+	}
+    response {
+        result 0 : integer
+		msg 1 : string
+        add_gold 2 : integer
+    }
+}
+
+signin_rewards_month 10 {
+    request {
+	}
+    response {
+        result 0 : integer
+		msg 1 : string
+        add_gold 2 : integer
+    }
+}
+
+.onlineReward {
+    time 0 : integer
+    award 1 : *award_tab
+}
+
+onlineReward_show 11 {
+    request {
+	}
+    response {
+        OnlineTime 0 : integer
+        RewardNum 1 : integer
+        config_tab 2 : *onlineReward
+    }
+}
+
+onlineReward_done 12 {
+    request {
+	}
+    response {
+        result 0 : integer
+		msg 1 : string
+        add_gold 2 : integer
+    }
+}
+
+#查询银行金币
+query_bank_gold 13 {
+	request {
+	}
+	response {
+		result 0 : integer
+		msg 1 : string
+		bank_gold 2 : integer
+	}
+}
+
+#存钱
+save_money 14 {
+	request {
+		bank_pwd 0 : string
+		gold_amount 1 : integer 
+	}
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#取钱
+take_money 15 {
+	request {
+		bank_pwd 0 : string
+		gold_amount 1 : integer 
+	}
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#根据show_id获取玩家昵称
+get_nickname 16 {
+	request {
+		show_id 0 : string
+	}
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#显示大转盘
+lottery_show 17 {
+    request {
+	}
+    response {
+		result 0 : integer
+        Name 1 : string
+        Gold 3 : integer
+        Pool 4 : string
+		msg 5 : string
+		free_lottery_num 6 : integer
+    }
+}
+
+#抽奖
+lottery_done 18 {
+    request {
+        times 0 : integer
+    }
+    response {
+        result 0 : integer
+        award_list 1 : *integer
+        msg 2 : string
+    }
+}
+
+#大奖列表]
+.award_item{
+	pos 0 : integer
+	name 1 : string
+}
+
+lottery_big_award 19 {
+    request {
+    }
+    response {
+		result 0 : integer
+        big_award_list 1 : *award_item
+		msg 2 : string
+    }
+}
+
+#玩家抽奖记录
+lotter_user_award 20 {
+    request {
+    }
+    response {
+		result 0 : integer
+        award_list 1 : *integer
+		msg 2 : string
+    }
+}
+
+#玩家购买商品
+shop_user_buy 21 {
+	request { 
+		mall_id 0 : string
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+        gold 2 : integer
+        diamonds 3 : integer
+        give_gold 4 : integer
+	}
+}
+
+#购买贵族
+noble_buy 22 {
+	request {
+		noble_days 0 : integer
+	}
+	
+	response {
+	    result 0 : integer
+		msg 1 : string
+	}
+}
+
+#显示贵族信息
+noble_show 23 {
+	request {
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#设置银行密码
+set_bank_pwd 24 {
+    request {
+        pwd 0 : string
+    }
+
+    response {
+      	result 0 : integer
+		msg 1 : string  
+    }
+}
+
+#验证银行密码
+check_bank_pwd 25 {
+    request {
+        pwd 0 : string
+    }
+
+    response {
+      	result 0 : integer
+		msg 1 : string  
+    }
+}
+
+#首冲赠送物品 
+first_recharge_desc 26 {
+	request {
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+        bindgold 2 : integer
+	}
+}
+
+.rank_data {
+	name 0 : string
+    show_id 1 : string
+	head 2 : string
+    gold 3 : integer
+	noble_buy_days 4 : integer
+}
+
+#获取排行榜数据
+get_rank_list 27 {
+	request {
+	}
+	
+	response { 
+		result 0 : integer
+		msg 1 : string
+        rank_list 2 : *rank_data
+	}
+}
+
+#修改昵称
+set_nickname 28 { 
+	request { 
+		uid 0 : integer
+		nickname 1 : string
+	}
+	
+	response { 
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#修改头像
+set_head_img 29 {
+	request { 
+		uid 0 : integer
+		head 1 : string
+	}
+	
+	response { 
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#获取头像信息
+get_head_info 30 {
+	request {
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : *integer
+	}
+}
+
+#购买头像
+buy_head 31 {
+	request {
+		head_id 0 : integer
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#获取当日心情
+get_mood_info 32 {
+	request {
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+		idx 2 : integer
+		luck 3 : string
+		colour 4 : string
+		luck_explain 5 : string
+	}
+}
+
+#获取游戏版本公告
+game_version_notify 33 {
+	request {
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#保存用户意见
+save_user_advise 34 {
+	request {
+		advise 0 : string
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#每日任务, is_give: 0 未领, 1 已领
+.task_info {
+	Id 0 : integer
+	main_task_id 1 : integer
+	sub_task_id 2 : integer
+	process 3 : integer
+	is_give 4 : integer
+	today_award_num 5 : integer
+	limit_num 6 : integer
+}
+
+get_all_daily_task 35 {
+	request {
+	}
+
+	response {
+		result 0 : integer
+		msg 1 : string
+		buyu_daily_task_list 2 : *task_info
+		jieji_daily_task_list 3 : *task_info
+		qipai_daily_task_list 4 : *task_info
+		free_change_task_times 5 : integer
+		fresh_needs_diamonds 6 : integer
+	}
+}
+
+#request_type: 1 有偿刷新随机任务， 2 做完三个任务无偿刷新随机任务
+get_buyu_daily_task 36 {
+	request {
+		request_type 0 : integer
+        request_num 1 : integer
+	}
+
+	response {
+		result 0 : integer
+		msg 1 : string
+		buyu_daily_task_list 2 : *task_info
+	}
+}
+
+get_jieji_daily_task 37 {
+	request {
+		request_type 0 : integer
+        request_num 1 : integer
+	}
+
+	response {
+		result 0 : integer
+		msg 1 : string
+		jieji_daily_task_list 2 : *task_info
+	}
+}
+
+get_qipai_daily_task 38 {
+	request {
+		request_type 0 : integer
+        request_num 1 : integer
+	}
+
+	response {
+		result 0 : integer
+		msg 1 : string
+		qipai_daily_task_list 2 : *task_info
+	}
+}
+
+#领奖
+get_task_award 39 {
+	request {
+		Id 0 : integer
+		main_task_id 1 : integer
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+		task_list 2 : *task_info
+	}
+}
+
+#邮件
+#state 读取状态，1：未读，2：已读
+#attachState 附件领取状态, 1:未领， 2 已领
+#haveAttach 是否有附件:1 有附件， 2 无附件
+#awardType 1:钻石，2:金币, 3:10元电话卡， 4:50元电话卡， 5:100元电话卡， 6:200元电话卡, 7:iPhone手机
+.mail {
+	id 0 : integer
+	title  1 : string
+	content 2 : string
+	attach 3 : string
+	haveAttach 4 : integer
+	attachState 5 : integer
+	state 6 : integer
+	createTime 7 : string
+	endTime 8 : string
+	userId 9 : integer
+	linkUrl 10 : string
+	senderName 11 : string
+    awardType 12 : integer
+    cardNo 13 : string
+    cardPwd 14 : string
+}
+
+get_mail_list 40 {
+	request {
+	}
+	
+	response { 
+		result 0 : integer
+		msg 1 : string
+		mail_list 2 : *mail
+	}
+}
+
+#读邮件
+read_email 41 {
+	request {
+		email_id 0 : integer
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#删除邮件
+#del_type, 1 删除单个邮件， 2 删除所有的过期邮件
+del_email 42 {
+	request {
+		del_type 0 : integer
+		email_id 1 : integer
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#领取邮件附件中的奖励
+get_email_award 43 {
+	request {
+		email_id 0 : integer
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+	}
+}
+
+#获取各个游戏房间人数
+.game_room_data {
+    game_id 0 : integer
+    room_id 1 : integer
+    enter_gold 2 : integer
+    enter_level 3 : integer
+    player_num 4 : integer
+}
+
+get_game_room_data 44 {
+    request {
+        game_id 0 : integer
+    }
+
+    response {
+        room_info_list 0 : *game_room_data
+    }
+}
+
+exchange_code 45 { 
+    request {
+        code 0 : string
+    }
+    response {
+        result 0 : integer
+        gold 1 : integer
+        msg 2 : string
+		vipTime 3 : integer
+    }
+}
+
+share_reward_receive_num 46 {
+    request {}
+    response {
+        bindgold 2 : integer
+    }
+}
+
+share_reward_receive 47 {
+    request {}
+    response {
+        result 0 : integer
+        msg 1 : string
+        bindgold 2 : integer
+    }
+}
+
+game_state_notify 48 {
+    request {
+        id 0 : integer
+        state 1 : integer
+    }
+}
+
+ios_recharge 49 {
+    request {
+        diamonds 0 : integer
+    }
+    response {
+        result 0 : integer
+        diamonds 1 : integer
+    }
+}
+
+########################春节活动协议head########################
+#获取活动状态 1未开启， 2已开启, 3已关闭
+get_activity_state 50 {
+    request {
+    }
+    response {
+        result 0 : integer
+        state 1 : integer
+    }
+}
+
+#获得大礼包内容
+dalibo_items_req 51 {
+    request {
+    }
+    response {
+        result 0 : integer
+        bindgold 1 : integer
+        diamonds 2 : integer
+        jssd 3 : integer
+        fish_num 4 : integer
+    }
+}
+
+#是否可以购买礼包
+buy_dalibo_req 52 {
+    request {
+    }
+    response {
+        result 0 : integer
+        msg 1 : string
+        surplus_secs 2 : integer
+    }
+}
+
+.monster{
+    checkpoint_num 0 : integer
+    life_value 1 : integer
+    award_bindgold 2 : integer
+}
+
+#获取所有怪物信息
+get_all_monster_info 53 {
+    request {
+    }
+
+    response {
+        monster_list 0 : *monster
+    }
+}
+
+#获取怪物关卡信息
+get_checkpoint_process 54 {
+    request {
+    }
+    response {
+        result 0 : integer
+        checkpoint_num 1 : integer #关卡进度即第几只怪物
+        monster_life_value 2 : integer #怪物生命值
+        checkpoint_surplus_num 3 : integer #剩余生命值
+        today_get_bindgold 4 : integer #今日累计获得绑金
+        timesten_attack_secs 5 : integer #十倍攻击剩余时间
+        timesten_attack_cd 6 : integer #十倍攻击cd时间
+        today_surplus_monster_num 7 : integer #当日剩余怪物数量
+        timesten_attack_surplus_cd 8 : integer #cd剩余时间
+        once_attack_need_diamonds 9 : integer #一次攻击需要的钻石数量
+    }
+}
+
+#请求多倍攻击
+timesten_attack_req  55 {
+    request {
+    }
+    response {
+        result 0 : integer #1请求十倍攻击成功，0请求十倍攻击失败
+        continue_secs 1 : integer #失败攻击持续时间
+    }
+}
+
+#攻击怪物
+attack_monster_req 56 {
+    request {
+    }
+    response {
+        result 0 : integer #1攻击成功, 0攻击失败, 2当日已击杀了最大数量
+        msg 1 : string
+        diamonds 2 : integer
+        bindgold 3 : integer
+        today_get_bindgold 4 : integer
+        checkpoint_surplus_num 5 : integer #剩余生命值
+        today_surplus_monster_num 6 : integer #当日剩余怪物数量
+        checkpoint_num 7 :  integer #关卡进度
+        beishu 8 : integer #奖励倍数
+    }
+}
+
+#重置关卡信息
+reset_checkpoint 57 {
+    request {
+    }
+    response {
+        result 0 : integer
+    }
+}
+########################春节活动协议end#########################
+
+####################### 活动专用协议start ###########################
+# 活动自定义协议
+activity_custom 58 {
+    request {
+		name 0 : string
+		content 1 : string
+	}
+	response {
+		name 0 : string
+		content 1 : string
+	}
+}
+####################### 活动专用协议end  ###########################
+
+#游客登录
+tourist_login 59 {
+	request {
+		loginDevice 0 : integer #登陆设备，1：Android，2：iOS，3：模拟器
+		loginMacCode 1 : string #机器码
+		upCode 2 : string
+	}
+	response {
+		result 0 : integer
+		msg 1 : string
+        lock_game 2 : integer
+        room_id 3 : integer
+        enter_key 4 : string
+	}
+}
+
+# 日进斗金 显示
+rijindoujin_show 60 {
+	request {
+
+	}
+	response {
+		self_gold 0 : integer
+		self_total_gold 1 : integer
+		friend_gold 2 : integer
+		friend_total_gold 3 : integer
+		is_receive 4 : integer
+		is_jiesuan 5 : integer
+	}
+}
+
+# 日进斗金 领取
+rijindoujin_receive 61 {
+	request {
+
+	}
+
+	response {
+		give_self_gold 0 : integer
+		give_friend_gold 1 : integer
+		gold 2 : integer
+		result 3 : integer
+		msg 4 : string
+	}
+}
+
+# 好友 总数量
+friend_num 62 {
+	request {
+	}
+
+	response {
+		num 0 : integer
+	}
+}
+
+.friend_data {
+    nickname 0 : string
+    showid 1 : string
+	head 2 : string
+    lastLoginTime 3 : integer
+	day_tax 4 : integer
+	day_tax_total 5 : integer
+}
+
+friend_show 63 {
+	request {
+		start_num 0 : integer
+		end_num 1 : integer
+	}
+
+	response {
+		friend_list 0 : *friend_data
+	}
+}
+
+.item_data {
+	id 0 : integer
+	item_count 1 : integer
+}
+
+# 请求背包物品列表
+bag_item_show 64 {
+	request {
+	}
+
+	response {
+		item_list 0 : *item_data
+	}
+}
+
+# 物品使用
+bag_item_used 65 {
+	request {
+		item_id 0 : integer
+		used_num 1 : integer
+	}
+	
+	response {
+		result 0 : integer
+		msg 1 : string
+		item_id 2 : integer
+		item_num 3 : integer
+	}
+}
+
+#赠送物品
+bag_item_give 66 {
+	request {
+		item_id 0 : integer
+		give_num 1 : integer
+		target_show_id 2 : string
+	}
+
+	response {
+		result 0 : integer
+		msg 1 : string
+		item_id 2 : integer
+		item_num 3 : integer
+		target_show_id 4 : string
+        nickname 5 : string
+	}
+}
+
+# 查询用户昵称
+bag_query_nickname 67 {
+    request {
+        show_id 0 : string
+    }
+    response {
+        result 0 : integer
+        msg 1 : string
+        nickname 2 : string
+    }
+}
+
+
+# 批量赠送物品
+bag_batch_give 68 {
+    request {
+        item_list 0 : *item_data
+        target_show_id 1 : string
+    }
+    response {
+        result 0 : integer
+        msg 1 : string
+        item_list 2 : *item_data
+        target_show_id 3 : string
+        nickname 4 : string
+    }
+}
+
+login_by_etoken 69 {
+	request {
+		key 0 : string
+	}
+
+	response {
+		result 0 : integer
+		msg 1 : string
+        lock_game 2 : integer
+        room_id 3 : integer
+        enter_key 4 : string
+	}
+}
